@@ -53,7 +53,7 @@ const showPokemonInfo = (data) => {
 const showType = array => {
     let spanEl = "";
     array.forEach((type) => {
-        spanEl += `<span class="badge ${type}">${type.toUpperCase()}</span>`
+        spanEl += `<span class="${type}">${type.toUpperCase()}</span>`
     })
     return spanEl;
 }
