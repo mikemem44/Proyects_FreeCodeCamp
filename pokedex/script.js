@@ -20,10 +20,15 @@ const fetchData = async() => {
     try {
         const pokemonQuery = searchInput.value.trim().toLowerCase();
         const response = await fetch(`${apiUrl}/${pokemonQuery}`);
+        if (!response.ok) {
+            alert("Pokemon not found")
+            return;
+        }
         const data = await response.json();
         showPokemonInfo(data);
     } catch (err) {
         console.log(err);
+        alert("An error occurred. Please try again later.");
     }
 };
 
@@ -31,25 +36,33 @@ const showPokemonInfo = (data) => {
     const { name,id,weight,height,types,stats,sprites } = data;
     const typeArray = types.map(t => t.type.name);
 
-    pokeName.textContent = name;
+    pokeName.textContent = name.toUpperCase();
     pokeId.textContent = `#${id}`;
     pokeWeight.textContent = `Weight: ${weight}`;
     pokeHeight.textContent = `Height: ${height}`;
     pokeImg.src = sprites.front_default;
     pokeImg.alt = `${name}`;
-    pokeTypes.textContent = typeArray;
+    pokeTypes.innerHTML = showType(typeArray);
     stats.forEach((stat,index) => {
         pokeStats[index].textContent = stat.base_stat;
     });
 
-    console.log(pokeImg);
+    console.log(pokeTypes);
+};
+
+const showType = array => {
+    let spanEl = "";
+    array.forEach((type) => {
+        spanEl += `<span class="badge ${type}">${type.toUpperCase()}</span>`
+    })
+    return spanEl;
 }
 
 
 
 searchBtn.addEventListener("click",() => {
     if(searchInput.value === "") {
-        alert("Please enter the name or id of a Pokemaon");
+        alert("Please enter the name or id of a Pokemon");
         return;
     }else{
         fetchData();
